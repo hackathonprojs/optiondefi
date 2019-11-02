@@ -5,6 +5,7 @@ let GCI = 'a4dfcaffc90a1b21e351bcf6e9f03035d1fc61299dd87d4ad009dd23ffd991db'
 
 async function writeState(newdata) {
   //let { state, send } = await connect(GCI)
+  // doing operation here works as well.
 }
 
 (async function () {  
