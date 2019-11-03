@@ -51,11 +51,16 @@ let app = lotion({
 	}
 })
 
-// function transactionHandler(state, transaction) {
-//   state.count++;
-// }
+let count = 0; 
+
+function transactionHandler(state, transaction) {
+  console.log(++count);
+  state.count++;
+}
+
 
 function createOptionHandler(state, transaction) {
+
   if (transaction.msgType === "create_option") {
     console.log("create option: ", transaction);
     let cloned = Object.assign({}, transaction);
@@ -66,9 +71,16 @@ function createOptionHandler(state, transaction) {
   }
 }
 
+function exerciseOptionHandler(state, transaction) {
+  // find the option with the specified id
+  // exercise that option 
+  // if the condition is satisfied:
+  // owner is the one exercising it.
+  // the owedToken is supplied.
+  // if so, the hold
+}
 
-
-//app.use(transactionHandler);
+app.use(transactionHandler);
 app.use(createOptionHandler);
 
 app.start().then(function(appInfo) {
