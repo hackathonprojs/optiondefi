@@ -32,13 +32,28 @@ let app = lotion({
       // repository of all the outstanding options
 
     },
+    asset1Balance: {
+      "alice": 10000,
+      "bob": 10000,
+      "carol": 10000,
+    },
+    asset2Balance: {
+      "alice": 10000,
+      "bob": 10000,
+      "carol": 10000,
+    },
+    asset3Balance: {
+      "alice": 10000,
+      "bob": 10000,
+      "carol": 10000,
+    },
 		count: 0,
 	}
 })
 
-function transactionHandler(state, transaction) {
-  state.count++;
-}
+// function transactionHandler(state, transaction) {
+//   state.count++;
+// }
 
 function createOptionHandler(state, transaction) {
   if (transaction.msgType === "create_option") {
@@ -51,7 +66,9 @@ function createOptionHandler(state, transaction) {
   }
 }
 
-app.use(transactionHandler);
+
+
+//app.use(transactionHandler);
 app.use(createOptionHandler);
 
 app.start().then(function(appInfo) {
@@ -68,6 +85,11 @@ app.start().then(function(appInfo) {
 
 
 
+//-------------------------------
+
+
+
+
 let optionTemplate = {
   id: undefined, // [integer] 
   type: undefined, // [string] "call", "put", "butterfly", "barrier"
@@ -75,6 +97,8 @@ let optionTemplate = {
   expiration: undefined, // [integer]  integer. the block height
   asset: undefined, // [string] the asset id of the underlying asset
   owner: undefined, // [string] address of the owner of this option
+  heldAsset: undefined,
+  owedAsset: undefined,
 }
 
 function simpleCreate(type, strike, expiration, asset, owner) {
