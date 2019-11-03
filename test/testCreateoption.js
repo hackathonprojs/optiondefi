@@ -10,36 +10,30 @@ fs.readFile("../gci.txt", "utf-8", (err, data) => {
 
   (async function () {  
 
-    let stateInfo = await readState();
-    createOption();
+    let option = {
+      "strike": 12,
+      "expiration": 200000,
+      "owner": "alice",
+      "optionType": "put",
+    }
+    createOption(option);
   })();
 })
 
 async function readState() {
   let { state, send } = await connect(GCI)
   let stateInfo = await state;
-  console.log(stateInfo);
   return stateInfo;
 }
 
-async function createOption() {
+async function createOption(option) {
   let { state, send } = await connect(GCI)
-  msg = {
-    "msgType": "create_option",
-    "strike": 12,
-    "expiration": 200000,
-    "owner": "alice",
-    "optionType": "put",
-  }
-  let resp = await send(msg);
+  option.msgType = "create_option";
+  let resp = await send(option);
   console.log('createOption response: ', resp);
 
-
-
-  let stateInfo = await state;
-  console.log(stateInfo);
-  return stateInfo;
 }
+
 
 // async function writeState(newdata) {
 //   let { state, send } = await connect(GCI)
