@@ -93,6 +93,23 @@ expressapp.get('/states', (req, res) => {
 	
 })
 
+expressapp.get('/options', (req, res) => {
+  console.log("states");
+
+  (async function () {
+    let stateInfo = await readState();
+    let optionsObj = stateInfo.options;
+    let optionsAr = [];
+    for (let prop in optionsObj) {
+      let option = optionsObj[prop];
+      optionsAr.push(option);
+    }
+
+    res.send(optionsAr);
+  })();
+	
+})
+
 expressapp.get('/createOption', (req, res) => {
   console.log("createOption");
   let option = {
