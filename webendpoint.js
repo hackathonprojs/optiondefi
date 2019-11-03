@@ -101,7 +101,11 @@ expressapp.get('/createOption', (req, res) => {
     "owner": "alice",
     "optionType": "put",
     "exercised": false,
-    "salePrice": -1,  
+    "salePrice": -1,
+    "style": "european",
+    "asset": "ETH", // [string] the asset id of the underlying asset
+    "heldAsset": "ETH",
+    "owedAsset": "ATOM",
   };
 
 
