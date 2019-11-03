@@ -1,6 +1,7 @@
 let { connect } = require('lotion')
+let fs = require('fs');
 
-let GCI = 'a49f67fb90ddc8c1dc4116abb443ccc6ab6511e7a097a8f97af6da68dc11fa68'
+let GCI
 
 
 // async function writeState(newdata) {
@@ -12,6 +13,13 @@ let GCI = 'a49f67fb90ddc8c1dc4116abb443ccc6ab6511e7a097a8f97af6da68dc11fa68'
 //   console.log(stateInfo);
 //   return stateInfo;
 // }
+
+fs.readFile("gci.txt", "utf-8", (err, data) => {
+  if (err) { console.log(err) }
+  console.log('GCI from gci.txt: ' + data);
+  GCI = data;
+  // this is async
+})
 
 async function readState() {
   let { state, send } = await connect(GCI)
@@ -31,6 +39,7 @@ const port = 5001
 expressapp.use(cors())
 
 expressapp.get('/states', (req, res) => {
+  console.log("states");
 
   (async function () {
     let stateInfo = await readState();
