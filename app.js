@@ -62,7 +62,7 @@ function transactionHandler(state, transaction) {
 function createOptionHandler(state, transaction) {
 
   if (transaction.msgType === "create_option") {
-    console.log("create option: ", transaction);
+    console.log("create_option: ", transaction);
     let cloned = Object.assign({}, transaction);
     if (!cloned.id) {
       cloned.id = new Date().getTime();
@@ -71,17 +71,89 @@ function createOptionHandler(state, transaction) {
   }
 }
 
+/**
+ * exercise option
+ * @param {*} state 
+ * @param {*} transaction 
+ */
 function exerciseOptionHandler(state, transaction) {
   // find the option with the specified id
   // exercise that option 
   // if the condition is satisfied:
-  // owner is the one exercising it.
-  // the owedToken is supplied.
-  // if so, the hold
+  // - owner is the one exercising it.
+  // - the owedToken is supplied.
+  // if so, exercised become true.
+  if (transaction.msgType === "exercise_option") {
+    console.log("exercise_option", transaction);
+    let id = transaction.id;
+    let option = findOptionById(state, id);
+    option.exercised = true;
+
+    // todo: change balance.
+  }
+}
+
+/**
+ * when owner wants to sell the option
+ * salePrice != -1
+ * @param {*} state 
+ * @param {*} transaction 
+ */
+function sellOptionHandler(state, transaction) {
+  if (transaction.msgType === "sell_option") {
+    console.log("sell_option", transaction);
+    let id = transaction.id;
+    let salePrice = transaction.salePrice;
+    let option = findOptionById(state, id);
+    option.salePrice = salePrice;
+
+    // todo: change balance.
+  }
+}
+
+/**
+ * when a user wants to buy the option
+ * owner = buyer
+ * salePrice = -1
+ * deduct balance from buyer
+ * add balance to original owner
+ * 
+ * @param {*} state 
+ * @param {*} transaction 
+ */
+function buyOptionHandler(state, transaction) {
+  if (transaction.msgType === "buy_option") {
+    console.log("sell_option", transaction);
+    let id = transaction.id;
+    let buyer = transaction.buyer;
+    let option = findOptionById(state, id);
+    
+    let oldOwner = option.owner;
+    option.owner = buyer;
+
+    let salePrice = option.salePrice;
+    option.salePrice = -1;
+
+    // todo: change balance.
+  }
+}
+
+/**
+ * find option by id
+ * @param {*} state 
+ * @param {*} id 
+ */
+function findOptionById(state, id) {
+  if (state.options) {
+    return state.options[id];
+  }
 }
 
 app.use(transactionHandler);
 app.use(createOptionHandler);
+app.use(exerciseOptionHandler);
+app.use(sellOptionHandler);
+app.use(buyOptionHandler);
 
 app.start().then(function(appInfo) {
 	console.log(`app started. gci: ${appInfo.GCI}`)

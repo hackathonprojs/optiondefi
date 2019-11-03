@@ -36,12 +36,13 @@ async function createOption(option) {
   return resp;
 }
 
-async function exerciseOption(optionId) {
+async function exerciseOption(id, user) {
   let { state, send } = await connect(GCI)
   
   let msg = {};
   msg.msgType = "exercise_option";
-  msg.optionId = optionId;
+  msg.id = id;
+  msg.user = user;
   let resp = await send(msg);
   console.log('exerciseOption response: ', resp);
 
@@ -72,6 +73,8 @@ expressapp.get('/createOption', (req, res) => {
     "expiration": 200000,
     "owner": "alice",
     "optionType": "put",
+    "exercised": false,
+    "salePrice": -1,  
   };
 
 
@@ -83,10 +86,11 @@ expressapp.get('/createOption', (req, res) => {
 })
 
 expressapp.get('/exerciseOption', (req, res) => {
-  let optionId = req.query.optionId;
+  let id = req.query.id;
+  let user = req.query.user;
 
   (async function() {
-    let lotionResp = await exerciseOption(optionId);
+    let lotionResp = await exerciseOption(id, user);
     res.send(lotionResp);
   })();
 
