@@ -125,7 +125,7 @@ function buyOptionHandler(state, transaction) {
   if (transaction.msgType === "buy_option") {
     console.log("sell_option", transaction);
     let id = transaction.id;
-    let buyer = transaction.buyer;
+    let buyer = transaction.user;
     let option = findOptionById(state, id);
     
     let oldOwner = option.owner;

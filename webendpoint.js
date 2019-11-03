@@ -31,7 +31,7 @@ async function createOption(option) {
   let { state, send } = await connect(GCI)
   option.msgType = "create_option";
   let resp = await send(option);
-  console.log('createOption response: ', resp);
+  console.log('create_option response: ', resp);
 
   return resp;
 }
@@ -44,7 +44,34 @@ async function exerciseOption(id, user) {
   msg.id = id;
   msg.user = user;
   let resp = await send(msg);
-  console.log('exerciseOption response: ', resp);
+  console.log('exercise_option response: ', resp);
+
+  return resp;
+}
+
+async function sellOption(id, user, salePrice) {
+  let { state, send } = await connect(GCI)
+  
+  let msg = {};
+  msg.msgType = "sell_option";
+  msg.id = id;
+  msg.user = user;
+  msg.salePrice = salePrice;
+  let resp = await send(msg);
+  console.log('sell_option response: ', resp);
+
+  return resp;
+}
+
+async function buyOption(id, user) {
+  let { state, send } = await connect(GCI)
+  
+  let msg = {};
+  msg.msgType = "buy_option";
+  msg.id = id;
+  msg.user = user;
+  let resp = await send(msg);
+  console.log('buy_option response: ', resp);
 
   return resp;
 }
@@ -91,6 +118,29 @@ expressapp.get('/exerciseOption', (req, res) => {
 
   (async function() {
     let lotionResp = await exerciseOption(id, user);
+    res.send(lotionResp);
+  })();
+
+})
+
+expressapp.get('/sellOption', (req, res) => {
+  let id = req.query.id;
+  let user = req.query.user;
+  let salePrice = req.query.salePrice;
+
+  (async function() {
+    let lotionResp = await sellOption(id, user, salePrice);
+    res.send(lotionResp);
+  })();
+
+})
+
+expressapp.get('/buyOption', (req, res) => {
+  let id = req.query.id;
+  let user = req.query.user;
+
+  (async function() {
+    let lotionResp = await buyOption(id, user);
     res.send(lotionResp);
   })();
 
