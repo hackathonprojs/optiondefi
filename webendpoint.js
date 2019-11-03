@@ -23,13 +23,30 @@ fs.readFile("gci.txt", "utf-8", (err, data) => {
 
 async function readState() {
   let { state, send } = await connect(GCI)
-
   let stateInfo = await state;
-  console.log(stateInfo);
   return stateInfo;
 }
 
+async function createOption(option) {
+  let { state, send } = await connect(GCI)
+  option.msgType = "create_option";
+  let resp = await send(option);
+  console.log('createOption response: ', resp);
 
+  return resp;
+}
+
+async function exerciseOption(optionId) {
+  let { state, send } = await connect(GCI)
+  
+  let msg = {};
+  msg.msgType = "exercise_option";
+  msg.optionId = optionId;
+  let resp = await send(msg);
+  console.log('exerciseOption response: ', resp);
+
+  return resp;
+}
 
 const express = require('express')
 var cors = require('cors')
@@ -47,6 +64,33 @@ expressapp.get('/states', (req, res) => {
   })();
 	
 })
-//expressapp.get('/', (req, res) => res.send('Hello World!'))
+
+expressapp.get('/createOption', (req, res) => {
+  console.log("createOption");
+  let option = {
+    "strike": 12,
+    "expiration": 200000,
+    "owner": "alice",
+    "optionType": "put",
+  };
+
+
+  (async function () {
+    let lotionResp = await createOption(option);
+	  res.send(lotionResp);
+  })();
+	
+})
+
+expressapp.get('/exerciseOption', (req, res) => {
+  let optionId = req.query.optionId;
+
+  (async function() {
+    let lotionResp = await exerciseOption(optionId);
+    res.send(lotionResp);
+  })();
+
+})
+
 
 expressapp.listen(port, () => console.log(`Example app listening on port ${port}!`))
