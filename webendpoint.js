@@ -120,10 +120,35 @@ expressapp.get('/createOption', (req, res) => {
     "exercised": false,
     "salePrice": -1,
     "style": "european",
-    "asset": "ETH", // [string] the asset id of the underlying asset
-    "heldAsset": "ETH",
+    "asset": "WETH", // [string] the asset id of the underlying asset
+    "heldAsset": "WETH",
     "owedAsset": "ATOM",
   };
+
+  if (req.query.asset) {
+    option.asset = req.query.asset;
+    option.heldAsset = req.query.asset;
+  }
+
+  if (req.query.optionType) {
+    option.optionType = req.query.optionType;
+  }
+
+  if (req.query.style) {
+    option.style = req.query.style;
+  }
+
+  if (req.query.strike) {
+    option.strike = parseInt(req.query.strike);
+  }
+
+  if (req.query.expiration) {
+    option.expiration = parseInt(req.query.expiration);
+  }
+
+  if (req.query.owner) {
+    option.owner = req.query.owner;
+  }
 
 
   (async function () {
